@@ -1,0 +1,30 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  background-color: #79c457;
+}
+#character-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.character {
+  width: 200px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(#e7cece, rgb(180, 13, 13));
+  padding: 10px 5px;
+  margin: 20px;
+  border: solid 3px #333;
+  border-radius: 15px;
+}
+.character p {
+  font-size: 30px;
+}
+.character img {
+  height: 200px;
+  object-fit: contain;
+}
