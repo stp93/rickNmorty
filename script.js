@@ -1,114 +1,106 @@
 const search = document.getElementById("search"),
       sub = document.getElementById('submit'),
-      card = document.getElementById('character-card')
+      card = document.getElementById('character-card'),
+      next = document.getElementById('next')
+      
       ;
-
-  //search function
-  // function searchChar(e){
-  //   // e.preventDefault(search);
-  //   //get search
-  //   const term = search.value;
+  //let page = 0
+  
+  // function searchTerm(e){
+  //   e.preventDefault()
+  //   const term = search.value
+  //   page = ++page
+    
     
   //   if(term.trim()){
-  //     fetch(`https://rickandmortyapi.com/api/character/?name=${term}`)
-  //     .then(
-    
-  //   response => {
+  //     fetch(`https://rickandmortyapi.com/api/character/?name=${term}&page=${page}`)
+  //     .then(res => {res.json()
+  //     .then(data =>{
+      
+  //       if(page == data.pages){
+  //         --page
+  //       }
+  //       console.log(data)
+  //       const html = data.results.map(character => {
 
-  //     // Examine the text in the response
-  //     response.json().then(data => {
-  //       console.log(data);
-
-  //        data.results.map(character => {
-
-  //         document.getElementById('character-card')
-  //       .innerHTML = `<div class="character">
-  //                 <img src="${character.image}">
-  //               <p>Designation: ${character.name}</p>
-  //             <p>Location: ${character.location.name}</p>
-  //             <p>${character.status}</p>
-  //             </div>` 
+          
+          
+  //         return  `
+  //                   <div class="character">
+  //                   <img src="${character.image}">
+  //                   <p>Designation: ${character.name}</p>
+  //                   <p>Location: ${character.location.name}</p>
+  //                   <p>${character.status}</p>
+  //                   </div>  ` 
               
   //       }).join('');
         
         
+  //       card.innerHTML = html
         
   //     })
-  //   }
-  // )
-  // .catch(error => {
-  //   console.log('Fetch Error :-S', err);
-  // });
-  //   }
-  // }
-  // //event listener
-  // sub.addEventListener('sub', searchChar );
-
-  function searchTerm(e){
-    e.preventDefault()
-    const term = search.value
-
-    if(term.trim()){
-      fetch(`https://rickandmortyapi.com/api/character/?name=${term}&status=alive`)
-      .then(res => {res.json()
-      .then(data =>{
-        
-        console.log(data)
-        const html = data.results.map(character => {
-
-          
-          
-          return  `
-                    <div class="character">
-                    <img src="${character.image}">
-                    <p>Designation: ${character.name}</p>
-                    <p>Location: ${character.location.name}</p>
-                    <p>${character.status}</p>
-                    </div>  ` 
-              
-        }).join('');
-        
-         
-        card.innerHTML = html
-        
+  //   })
       
-      })
-      })
       
-    }
-  }
-
-  sub.addEventListener('submit',searchTerm)
-
-// fetch('https://rickandmortyapi.com/api/character/?name=morty')
-//   .then(
+      
+  //   }
     
-//     response => {
+  // }
 
-//       // Examine the text in the response
-//       response.json().then(data => {
-//         console.log(data);
+  const searchCharacters = async searchChar => {
+    const res = await fetch(`https://rickandmortyapi.com/api/character/`)
+      const character= await res.json();
 
-//         const html = data.results.map(character => {
-         
+      console.log(character)
+      
+      let matches = character.results.filter(char=>{
+        const regex = new RegExp(`^${searchChar}`, 'gi');
+        return char.name.match(regex)|| char.location.name.match(regex);
+      })
+      if (searchChar.length === 0){
+        matches = []
+        card.innerHTML = '';
+      }
+      outputHtml(matches);
+      
+
+    }
+  
+    const outputHtml = matches =>{
+      if(matches.length > 0){
+        const html = matches.map(match =>`
+                      <div class="character">
+                     <img src="${match.image}">
+                     <p>Designation: ${match.name}</p>
+                     <p>Location: ${match.location.name}</p>
+                     <p>${match.status}</p>
+                    </div>
+        `).join('');
+        card.innerHTML = html;
+      }
+    }
+  
+      //const html = data.results.map(character => {
 
           
-//           return `<div class="character">
-//                   <img src="${character.image}">
-//                 <p>Designation: ${character.name}</p>
-//               <p>Location: ${character.location.name}</p>
-//               <p>${character.status}</p>
-//               </div>` 
+          
+  //         return  `
+  //                   <div class="character">
+  //                   <img src="${character.image}">
+  //                   <p>Designation: ${character.name}</p>
+  //                   <p>Location: ${character.location.name}</p>
+  //                   <p>${character.status}</p>
+  //                   </div>  ` 
               
-           
-//         }).join('');
+  //       }).join('');
         
-//         document.getElementById('character-card')
-//         .innerHTML=html
         
-//       })
-//     }
-//   )
-//   .catch(error => {
-//     console.log('Fetch Error :-S', err);
-//   });
+         
+  
+
+
+
+  search.addEventListener('input', ()=> searchCharacters(search.value))
+  // sub.addEventListener('submit',searchTerm,page = 0)
+  // next.addEventListener('submit', searchTerm)
+  
